@@ -152,8 +152,6 @@ CREATE TABLE dim_date (
 
 TRUNCATE TABLE dim_date;
 
-TRUNCATE TABLE dim_date;
-
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/dates.csv'
 INTO TABLE dim_date
 FIELDS TERMINATED BY ','
@@ -162,28 +160,7 @@ LINES TERMINATED BY '\r\n'
 IGNORE 1 ROWS
 (@date_key, year, quarter, month, day, @month_start, @month_end)
 SET
-  date_key = CASE
-               WHEN @date_key LIKE '____-__-__'
-                 THEN STR_TO_DATE(@date_key, '%Y-%m-%d')
-               WHEN @date_key LIKE '__-__-____'
-                 THEN STR_TO_DATE(@date_key, '%d-%m-%Y')
-               ELSE NULL
-             END,
-  month_start = CASE
-                  WHEN @month_start LIKE '____-__-__'
-                    THEN STR_TO_DATE(@month_start, '%Y-%m-%d')
-                  WHEN @month_start LIKE '__-__-____'
-                    THEN STR_TO_DATE(@month_start, '%d-%m-%Y')
-                  ELSE NULL
-                END,
-  month_end = CASE
-                WHEN @month_end LIKE '____-__-__'
-                  THEN STR_TO_DATE(@month_end, '%Y-%m-%d')
-                WHEN @month_end LIKE '__-__-____'
-                  THEN STR_TO_DATE(@month_end, '%d-%m-%Y')
-                ELSE NULL
-              END;
+  date_key    = STR_TO_DATE(@date_key, '%d-%m-%Y'),
+  month_start = STR_TO_DATE(@month_start, '%d-%m-%Y'),
+  month_end   = STR_TO_DATE(@month_end, '%d-%m-%Y');
 
-
-
-Error Code: 29. File 'C:\ProgramData\MySQL\MySQL Server 8.0\Uploads\dim_date.csv' not found (OS errno 2 - No such file or directory)

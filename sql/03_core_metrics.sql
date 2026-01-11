@@ -10,7 +10,7 @@ SELECT
 FROM month_calendar mc
 LEFT JOIN subscriptions s
   ON s.start_date <= LAST_DAY(mc.month_start)
- AND (s.end_date IS NULL OR s.end_dt >= mc.month_start)
+ AND (s.end_date IS NULL OR s.end_date >= mc.month_start)
 WHERE mc.month_start BETWEEN
     (SELECT DATE_FORMAT(MIN(start_date), '%Y-%m-01')
      FROM subscriptions
@@ -30,12 +30,12 @@ SELECT
     COALESCE(SUM(s.monthly_price), 0) * 12 AS arr
 FROM month_calendar mc
 LEFT JOIN subscriptions s
-  ON s.start_dt <= LAST_DAY(mc.month_start)
- AND (s.end_dt IS NULL OR s.end_dt >= mc.month_start)
+  ON s.start_date <= LAST_DAY(mc.month_start)
+ AND (s.end_date IS NULL OR s.end_date >= mc.month_start)
 WHERE mc.month_start BETWEEN
-    (SELECT DATE_FORMAT(MIN(start_dt), '%Y-%m-01')
+    (SELECT DATE_FORMAT(MIN(start_date), '%Y-%m-01')
      FROM subscriptions
-     WHERE start_dt IS NOT NULL)
+     WHERE start_date IS NOT NULL)
     AND DATE_FORMAT(CURDATE(), '%Y-%m-01')
 GROUP BY mc.month_start
 ORDER BY mc.month_start;
@@ -48,10 +48,10 @@ WITH month_calendar AS (
 ),
 churned AS (
   SELECT
-      DATE_FORMAT(end_dt, '%Y-%m-01') AS churn_month,
+      DATE_FORMAT(end_date, '%Y-%m-01') AS churn_month,
       COUNT(DISTINCT customer_id) AS customers_lost
   FROM subscriptions
-  WHERE end_dt IS NOT NULL
+  WHERE end_date IS NOT NULL
   GROUP BY churn_month
 ),
 active_base AS (
@@ -61,8 +61,8 @@ active_base AS (
   FROM month_calendar mc
   LEFT JOIN subscriptions s
     -- customer must be active at start of month
-    ON s.start_dt < mc.month_start
-   AND (s.end_dt IS NULL OR s.end_dt >= mc.month_start)
+    ON s.start_date < mc.month_start
+   AND (s.end_date IS NULL OR s.end_date >= mc.month_start)
   GROUP BY mc.month_start
 )
 
@@ -80,9 +80,9 @@ LEFT JOIN churned c
 LEFT JOIN active_base a
   ON a.month_start = mc.month_start
 WHERE mc.month_start BETWEEN
-    (SELECT DATE_FORMAT(MIN(start_dt), '%Y-%m-01')
+    (SELECT DATE_FORMAT(MIN(start_date), '%Y-%m-01')
      FROM subscriptions
-     WHERE start_dt IS NOT NULL)
+     WHERE start_date IS NOT NULL)
     AND DATE_FORMAT(CURDATE(), '%Y-%m-01')
 ORDER BY mc.month_start;
 
@@ -101,18 +101,18 @@ mrr_start AS (
       COALESCE(SUM(s.monthly_price), 0) AS mrr_at_start
   FROM month_calendar mc
   LEFT JOIN subscriptions s
-    ON s.start_dt < mc.month_start
-   AND (s.end_dt IS NULL OR s.end_dt >= mc.month_start)
+    ON s.start_date < mc.month_start
+   AND (s.end_date IS NULL OR s.end_date >= mc.month_start)
   GROUP BY mc.month_start
 ),
 
 mrr_lost AS (
   -- MRR LOST in that month (subscriptions that ended in that month)
   SELECT
-      DATE_FORMAT(end_dt, '%Y-%m-01') AS churn_month,
+      DATE_FORMAT(end_date, '%Y-%m-01') AS churn_month,
       COALESCE(SUM(monthly_price), 0) AS mrr_lost
   FROM subscriptions
-  WHERE end_dt IS NOT NULL
+  WHERE end_date IS NOT NULL
   GROUP BY churn_month
 )
 
@@ -134,9 +134,9 @@ FROM mrr_start ms
 LEFT JOIN mrr_lost ml
   ON ml.churn_month = ms.month_start
 WHERE ms.month_start BETWEEN
-    (SELECT DATE_FORMAT(MIN(start_dt), '%Y-%m-01')
+    (SELECT DATE_FORMAT(MIN(start_date), '%Y-%m-01')
      FROM subscriptions
-     WHERE start_dt IS NOT NULL)
+     WHERE start_date IS NOT NULL)
     AND DATE_FORMAT(CURDATE(), '%Y-%m-01')
   AND ms.mrr_at_start > 0
 ORDER BY churn_month;
@@ -170,13 +170,13 @@ SELECT
 
 FROM month_calendar mc
 LEFT JOIN subscriptions s
-  ON s.start_dt <= LAST_DAY(mc.month_start)
- AND (s.end_dt IS NULL OR s.end_dt >= mc.month_start)
+  ON s.start_date <= LAST_DAY(mc.month_start)
+ AND (s.end_date IS NULL OR s.end_date >= mc.month_start)
 
 WHERE mc.month_start BETWEEN
-    (SELECT DATE_FORMAT(MIN(start_dt), '%Y-%m-01')
+    (SELECT DATE_FORMAT(MIN(start_date), '%Y-%m-01')
      FROM subscriptions
-     WHERE start_dt IS NOT NULL)
+     WHERE start_date IS NOT NULL)
     AND DATE_FORMAT(CURDATE(), '%Y-%m-01')
 
 GROUP BY mc.month_start
