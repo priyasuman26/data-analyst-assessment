@@ -190,15 +190,15 @@ This notebook is used for:
 - sanity checking metric outputs before visualizing in Power BI
 
   # 8) Power BI dashboard build
-1. Connect Power BI to MySQL database
-2. Import cleaned tables
-3. Build visuals:
+8.1 Connect Power BI to MySQL database
+8.2 Import cleaned tables
+8.3 Build visuals:
    - KPI cards (Total / Active)
    - MRR trend line
    - churn bar chart
    - segment/source breakdown
    - funnel by stage
-4. Add slicers: Channel, Country, Timeline
+8.4. Add slicers: Channel, Country, Timeline
 
  Explaination of each chart 
 -- multiple selction can be made in the filter and slicer of acquition and country on powerbi based on the stakeholders needs and vision for better desicion making
@@ -220,30 +220,32 @@ Use it to identify the various channels through which the acquistion is made and
 4) Country Code (Slicer)
 What it does: Filters by geography.
 Purpose: 
-1. If churn spikes in a region → may indicate localization/pricing/support issues.
-2. If a country performs well → then campaign and sales for product can be more. 
+4.1 If churn spikes in a region → may indicate localization/pricing/support issues.
+4.2 If a country performs well → then campaign and sales for product can be more. 
 
 5) Timeline (Date Slicer)
 What it does: Lets you focus trends for a selected date window.
 Purpose:
-1. Helps validate if GTM actions actually moved metrics.
+5.1 Helps validate if GTM actions actually moved metrics.
 
 6) Revenue Recurring by Month (MRR Line Chart)
 What it shows: Monthly recurring revenue trend (growth, stability, decline).
 Purpose
-1. If MRR increases steadily → good GTM execution, strong recurring revenue engine.
-2.  If MRR flattens → growth slowed → check funnel drop-offs + expansion then look into various campaigna and support
-3.  If MRR declines → churn / contraction issue → analyze churn months + customer segment losses
+6.1 If MRR increases steadily → good GTM execution, strong recurring revenue engine.
+6.2  If MRR flattens → growth slowed → check funnel drop-offs + expansion then look into various campaigna and support
+6.3  If MRR declines → churn / contraction issue → analyze churn months + customer segment losses
 then look into various campaigna and support
 
 7) Logo Churn Customers by Month (Bar Chart)
 What it shows: Number of churned customers per month.
 Action lens:
-1. If churn is low/stable → retention is under control.
-2. If churn spikes → investigate that cohort:
+7.1 If churn is low/stable → retention is under control.
+7.2 If churn spikes → investigate that cohort:
 relook into:  pricing change? product issue? focus on the segment churn? 
+
 8) Source Breakdown (Segment Distribution Bar Chart)
 this graph show how various source affect on the product and gives better understanding where the stakeholder should be focussing on in terms for the source and segment
+
 9) Funnel Customers by Stage (Funnel Chart)
 What it shows: Customer movement through lifecycle:
 Signup → Trial → Activated → Paid → Churned
