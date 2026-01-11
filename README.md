@@ -1,4 +1,4 @@
-# SaaS Growth and GTM Analytics (Power BI + MySQL)
+# SaaS Growth and GTM Analytics (Power BI + MySQL + Python)
 
   # Overview of the analysis
 This project builds a SaaS Growth + GTM Analytics dashboard using MySQL for data modeling/metrics and Power BI for visualization for better desicion making for better decision making.
